@@ -1,6 +1,3 @@
-Great! Here is an updated version of the README.md file that includes information about the backend Node.js server using Express to provide data for the application.
-
----
 
 # Vehicle Tracker Application
 
