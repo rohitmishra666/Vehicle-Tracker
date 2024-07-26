@@ -4,32 +4,40 @@ import FilterTab from './components/FilterTab';
 import Seekbar from './components/Seekbar';
 import axios from 'axios';
 
-const response = await axios.get(import.meta.env.VITE_BACKEND_URL);
-const dummyData = response.data;
-
 const App = () => {
   const [vehiclePosition, setVehiclePosition] = useState([17.385044, 78.486671]);
   const [showDialog, setShowDialog] = useState(false);
   const [showSeekBar, setShowSeekBar] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [dummyData, setDummyData] = useState([]);
+
+  useEffect(() => {
+    axios.get(import.meta.env.VITE_BACKEND_URL).then((res) => {
+      setDummyData(res.data);
+    }).catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  }, []);
 
   useEffect(() => {
     if (currentIndex >= dummyData.length) {
       setIsPlaying(false);
     }
-  }, [currentIndex]);
+  }, [currentIndex, dummyData.length]);
 
   return (
     <>
-      <Map 
-        vehiclePosition={vehiclePosition} 
-        setVehiclePosition={setVehiclePosition} 
-        isPlaying={isPlaying} 
-        currentIndex={currentIndex} 
-        setCurrentIndex={setCurrentIndex} 
-        data={dummyData} 
-      />
+      {dummyData.length > 0 && (
+        <Map 
+          vehiclePosition={vehiclePosition} 
+          setVehiclePosition={setVehiclePosition} 
+          isPlaying={isPlaying} 
+          currentIndex={currentIndex} 
+          setCurrentIndex={setCurrentIndex} 
+          data={dummyData} 
+        />
+      )}
       <div className="absolute bottom-0 left-0 p-4 m-4">
         <button
           onClick={() => setShowDialog(prev => !prev)}
